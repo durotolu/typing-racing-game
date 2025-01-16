@@ -4,8 +4,8 @@ class GameService {
   private players: { [key: string]: Player } = {};
 
   // Add a new player to the game
-  addPlayer(id: string, name: string): void {
-    this.players[id] = { id, name, progress: 0 };
+  addPlayer(id: string, name: string, car: string): void {
+    this.players[id] = { id, name, progress: 0, car };
   }
 
   // Remove a player from the game

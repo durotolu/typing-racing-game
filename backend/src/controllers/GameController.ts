@@ -5,8 +5,8 @@ export const setupGameHandlers = (io: Server): void => {
   io.on('connection', (socket) => {
 
     // Handle player joining
-    socket.on('joinGame', ({ playerId, playerName }) => {
-      gameService.addPlayer(playerId, playerName); // Use playerId instead of socket.id
+    socket.on('joinGame', ({ playerId, playerName, car }) => {
+      gameService.addPlayer(playerId, playerName, car);
       io.emit('updatePlayers', gameService.getPlayers());
     });
 
