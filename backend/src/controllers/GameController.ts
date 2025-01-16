@@ -3,17 +3,16 @@ import { gameService } from '../services/GameService';
 
 export const setupGameHandlers = (io: Server): void => {
   io.on('connection', (socket) => {
-    console.log(`User connected: ${socket.id}`);
 
     // Handle player joining
-    socket.on('joinGame', (playerName: string) => {
-      gameService.addPlayer(socket.id, playerName);
+    socket.on('joinGame', ({ playerId, playerName }) => {
+      gameService.addPlayer(playerId, playerName); // Use playerId instead of socket.id
       io.emit('updatePlayers', gameService.getPlayers());
     });
 
     // Handle typing progress
-    socket.on('typingProgress', (progress: number) => {
-      gameService.updateProgress(socket.id, progress);
+    socket.on('typingProgress', ({ playerId, progress }) => {
+      gameService.updateProgress(playerId, progress);
       io.emit('updatePlayers', gameService.getPlayers());
     });
 
