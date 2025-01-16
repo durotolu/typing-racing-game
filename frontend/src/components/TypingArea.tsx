@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
-const TypingArea: React.FC<{ onProgress: (progress: number) => void }> = ({
+const TypingArea: React.FC<{ disabled: boolean, onProgress: (progress: number) => void }> = ({
   onProgress,
+  disabled,
 }) => {
   const [input, setInput] = useState('');
   const sentence = 'Type this text as fast as you can!';
@@ -18,6 +19,7 @@ const TypingArea: React.FC<{ onProgress: (progress: number) => void }> = ({
       <p>{sentence}</p>
       <textarea
         value={input}
+        disabled={disabled}
         onChange={handleInputChange}
         className="w-1/2 border p-2"
       />
