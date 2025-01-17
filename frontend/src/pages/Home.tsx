@@ -6,12 +6,12 @@ interface Player {
   progress: number;
 }
 
-const Home = ({setPlayerId, players}: {players: Player[], setPlayerId: (id: string) => void}) => {
+const Home = ({ players}: {players: Player[] }) => {
 
   return (
     <div className="text-center space-y-20">
       <h1 className="text-4xl font-bold">Typing Race Game</h1>
-      <JoinGame setPlayerId={setPlayerId} players={players} />
+      <JoinGame players={players} />
     </div>
   );
 };
