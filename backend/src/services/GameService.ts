@@ -24,6 +24,16 @@ class GameService {
   getPlayers(): Player[] {
     return Object.values(this.players);
   }
+
+  // Check for a winner
+  checkWinner(): Player | null {
+    const winner = Object.values(this.players).find((player) => player.progress >= 100);
+    return winner || null;
+  }
+
+  resetGame() {
+    this.players = {};
+  }
 }
 
 export const gameService = new GameService();
