@@ -28,7 +28,12 @@ const TypingArea: React.FC<{ disabled: boolean, onProgress: (progress: number) =
       Math.max(0, 1 - (value.length - sentence.length) / sentence.length) : 1;
     
     // Final progress considers accuracy, completion and length penalty
-    const progress = Math.min(accuracy * lengthPenalty, 100);
+    let progress = Math.min(accuracy * lengthPenalty, 100);
+    
+    // If text matches exactly, set progress to 100
+    if (value === sentence) {
+      progress = 100;
+    }
     
     onProgress(progress);
   };

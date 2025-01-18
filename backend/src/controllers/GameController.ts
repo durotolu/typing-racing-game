@@ -16,13 +16,17 @@ export const setupGameHandlers = (io: Server): void => {
     socket.on('typingProgress', ({ playerId, progress }) => {
       gameService.updateProgress(playerId, progress);
 
-      // Check if any player reached 100 progress
+      // First emit the progress update
+      io.emit('updatePlayers', gameService.getPlayers());
+
+      // Then check for winner and emit game over if needed
       const winner = gameService.checkWinner();
       if (winner) {
-        io.emit('gameOver', { winner });
-        gameService.resetGame();
-      } else {
-        io.emit('updatePlayers', gameService.getPlayers());
+        // Small delay to ensure progress update is rendered
+        setTimeout(() => {
+          io.emit('gameOver', { winner });
+          gameService.resetGame();
+        }, 100);
       }
     });
 
