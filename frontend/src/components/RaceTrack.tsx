@@ -22,12 +22,10 @@ const RaceTrack: React.FC<{ players: Player[], playerId: string }> = ({ players,
   return (
     <div className="space-y-4 w-full bg-gray-800 p-6 rounded-lg">
       {players.map((player, index) => (
-        <div key={index}>
-        <div>{player.progress}</div>
+        <div key={index} className='flex w-full items-center gap-4'>
           <div className="w-[150px] text-sm text-white font-semibold">
             {player.name} {playerId === player.id && "(Me)"}
           </div>
-        <div key={index} className='flex w-full items-center gap-4'>
           <div className="relative flex-1">
             {/* Race Lane */}
             <div className="h-12 bg-gray-700 rounded-lg border-2 border-yellow-500 relative overflow-hidden">
@@ -46,7 +44,7 @@ const RaceTrack: React.FC<{ players: Player[], playerId: string }> = ({ players,
               
               {/* Car */}
               <div
-                className="absolute top-1/2 -translate-y-1/2 transition-all duration-300 w-12 h-12 flex items-center justify-center z-10"
+                className="absolute top-1/2 -translate-y-1/2 transition-all duration-300 w-12 h-12 flex items-center justify-center"
                 style={{ left: `${player.progress}%` }}
               >
                 <img 
@@ -57,7 +55,6 @@ const RaceTrack: React.FC<{ players: Player[], playerId: string }> = ({ players,
               </div>
             </div>
           </div>
-        </div>
         </div>
       ))}
     </div>
