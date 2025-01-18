@@ -40,8 +40,6 @@ const Game = ({
   const name = searchParams.get('name');
   const length = searchParams.get('length');
 
-  console.log(name, length);
-
   const handleNewGame = useCallback(() => {
     setIsGameOver(false);
     setWinner(null);
