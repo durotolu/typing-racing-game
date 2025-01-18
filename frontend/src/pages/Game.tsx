@@ -85,17 +85,6 @@ const Game = ({
       setIsGameOver(true);
       setWinner(winner?.name);
       setCountdown(5);
-  
-      const interval = setInterval(() => {
-        setCountdown((prev) => {
-          const newCount = prev - 1;
-          if (newCount < 0) {
-            clearInterval(interval);
-            handleNewGame();
-          }
-          return newCount;
-        });
-      }, 1000);
     });
   
     return () => {
@@ -103,7 +92,29 @@ const Game = ({
       socket.off('updateSentence');
       socket.off('gameOver');
     };
-  }, [handleNewGame, length, name, playerId, setPlayerId, setPlayers]);
+  }, [length, name, playerId, setPlayerId, setPlayers]);
+
+  useEffect(() => {
+    if (isGameOver) {
+      const interval = setInterval(() => {
+        setCountdown((prev) => {
+          const newCount = prev - 1;
+          if (newCount < 0) {
+            clearInterval(interval);
+          }
+          return newCount;
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isGameOver]);
+
+  useEffect(() => {
+    if (isGameOver && countdown < 0) {
+      handleNewGame();
+    }
+  }, [isGameOver, countdown, handleNewGame]);
 
   const handleProgress = (progress: number) => {
     if (!isOverlayActive && !isGameOver) {
