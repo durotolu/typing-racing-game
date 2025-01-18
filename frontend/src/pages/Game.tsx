@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import io from 'socket.io-client';
 import RaceTrack from '../components/RaceTrack';
 import TypingArea from '../components/TypingArea';
@@ -32,10 +32,10 @@ const Game = ({
   const [countdown, setCountdown] = useState(3);
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
+  const [sentence, setSentence] = useState('');
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const firstExecution = useRef(true);
 
   const name = searchParams.get('name');
   const length = searchParams.get('length');
@@ -44,6 +44,7 @@ const Game = ({
     setIsGameOver(false);
     setWinner(null);
     setPlayers([]);
+    setSentence('');
     socket.connect();
     navigate('/');
   }, [navigate, setPlayers]);
@@ -63,39 +64,45 @@ const Game = ({
   }, [isGameOver, players.length]);
 
   useEffect(() => {
-    if (firstExecution.current) {
-      firstExecution.current = false; // Prevent further execution
+    if (!playerId) {
       const randomId = generateRandomId();
       setPlayerId(randomId);
       socket.emit('joinGame', { playerId: randomId, playerName: name, car: `car${length}` });
+    } else {
+      socket.emit('joinGame', { playerId, playerName: name, car: `car${length}` });
     }
-  
+
     socket.on('updatePlayers', (data: Player[]) => {
       setPlayers(data);
+    });
+
+    socket.on('updateSentence', (newSentence: string) => {
+      setSentence(newSentence);
     });
   
     socket.on('gameOver', ({ winner }) => {
       setIsGameOver(true);
       setWinner(winner?.name);
+      setCountdown(5);
   
-      // Countdown logic here
-      let countdownTimer = 5;
       const interval = setInterval(() => {
-        console.log(`New game starts in: ${countdownTimer} seconds`);
-        countdownTimer--;
-  
-        if (countdownTimer < 0) {
-          clearInterval(interval);
-          handleNewGame();
-        }
+        setCountdown((prev) => {
+          const newCount = prev - 1;
+          if (newCount < 0) {
+            clearInterval(interval);
+            handleNewGame();
+          }
+          return newCount;
+        });
       }, 1000);
     });
   
     return () => {
       socket.off('updatePlayers');
+      socket.off('updateSentence');
       socket.off('gameOver');
     };
-  }, [handleNewGame, length, name, setPlayerId, setPlayers]);
+  }, [handleNewGame, length, name, playerId, setPlayerId, setPlayers]);
 
   const handleProgress = (progress: number) => {
     if (!isOverlayActive && !isGameOver) {
@@ -109,6 +116,7 @@ const Game = ({
         <div className="flex flex-col items-center justify-center space-y-6">
           <div className="text-4xl font-bold">Game Over!</div>
           <div className="text-2xl">Winner: {winner}</div>
+          <div className="text-xl">New game starts in {countdown} seconds</div>
         </div>
       )}
       {players.length >= 4 || isGameOver ? (
@@ -121,7 +129,11 @@ const Game = ({
             </div>
           )}
           <RaceTrack players={players} playerId={playerId} />
-          <TypingArea onProgress={handleProgress} disabled={isOverlayActive || isGameOver} />
+          <TypingArea 
+            onProgress={handleProgress} 
+            disabled={isOverlayActive || isGameOver} 
+            sentence={sentence}
+          />
         </>
       ) : (
         <div className="text-2xl text-center">Waiting for other players...</div>

@@ -8,7 +8,9 @@ export const setupGameHandlers = (io: Server): void => {
     // Handle player joining
     socket.on('joinGame', ({ playerId, playerName, car }) => {
       gameService.addPlayer(playerId, playerName, car);
+      // Send both players and current sentence
       io.emit('updatePlayers', gameService.getPlayers());
+      io.emit('updateSentence', gameService.getCurrentSentence());
     });
 
     socket.on('typingProgress', ({ playerId, progress }) => {
@@ -34,6 +36,7 @@ export const setupGameHandlers = (io: Server): void => {
     // Handle get players request
     socket.on('getPlayers', () => {
       io.emit('playersData', gameService.getPlayers());
+      io.emit('updateSentence', gameService.getCurrentSentence());
     });
   });
 };
