@@ -3,6 +3,7 @@ import { gameService } from '../services/GameService';
 
 export const setupGameHandlers = (io: Server): void => {
   io.on('connection', (socket) => {
+    console.log(`User connected: ${socket.id}`);
 
     // Handle player joining
     socket.on('joinGame', ({ playerId, playerName, car }) => {
@@ -25,12 +26,12 @@ export const setupGameHandlers = (io: Server): void => {
 
     // Handle player disconnect
     socket.on('disconnect', () => {
-      gameService.resetGame()
+      gameService.removePlayer(socket.id);
       io.emit('updatePlayers', gameService.getPlayers());
       console.log(`User disconnected: ${socket.id}`);
     });
 
-    // Handle player disconnect
+    // Handle get players request
     socket.on('getPlayers', () => {
       io.emit('playersData', gameService.getPlayers());
     });
