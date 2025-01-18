@@ -6,8 +6,8 @@ export const setupGameHandlers = (io: Server): void => {
     console.log(`User connected: ${socket.id}`);
 
     // Handle player joining
-    socket.on('joinGame', ({ playerId, playerName, car }) => {
-      gameService.addPlayer(playerId, playerName, car);
+    socket.on('joinGame', ({ playerId, playerName }) => {
+      gameService.addPlayer(playerId, playerName);
       // Send both players and current sentence
       io.emit('updatePlayers', gameService.getPlayers());
       io.emit('updateSentence', gameService.getCurrentSentence());

@@ -14,12 +14,12 @@ class GameService {
   private currentSentence: string = '';
 
   // Add a new player to the game
-  addPlayer(id: string, name: string, car: string): void {
+  addPlayer(id: string, name: string): void {
     // If this is the first player, generate a new sentence
     if (Object.keys(this.players).length === 0) {
       this.currentSentence = this.generateNewSentence();
     }
-    this.players[id] = { id, name, progress: 0, car };
+    this.players[id] = { id, name, progress: 0 };
   }
 
   // Remove a player from the game

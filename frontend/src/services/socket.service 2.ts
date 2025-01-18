@@ -52,7 +52,7 @@ class SocketService {
     return SocketService.instance;
   }
 
-  public async joinGame(playerName: string, car: string): Promise<void> {
+  public async joinGame(playerName: string): Promise<void> {
     try {
       if (!this.isConnected) {
         await this.connect();
@@ -62,7 +62,7 @@ class SocketService {
         throw new Error('Socket ID not available');
       }
 
-      this.socket.emit('joinGame', { playerId: this.socket.id, playerName, car });
+      this.socket.emit('joinGame', { playerId: this.socket.id, playerName });
     } catch (error) {
       console.error('Failed to join game:', error);
       throw error;

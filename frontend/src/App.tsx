@@ -9,14 +9,13 @@ const App: React.FC = () => {
   const [players, setPlayers] = useState<{
     id: string;
     name: string;
-    car: "car1" | "car2" | "car3" | "car4";
     progress: number;
   }[]>([]);
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home players={players} />} />
+        <Route path="/" element={<Home />} />
         <Route path="/game" element={<Game playerId={playerId} setPlayers={setPlayers} players={players} setPlayerId={setPlayerId} />} />
       </Routes>
     </Router>

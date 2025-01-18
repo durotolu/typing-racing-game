@@ -10,7 +10,6 @@ const socket = io('http://localhost:4000');
 interface Player {
   id: string;
   name: string;
-  car: "car1" | "car2" | "car3" | "car4";
   progress: number;
 }
 
@@ -41,6 +40,8 @@ const Game = ({
   const name = searchParams.get('name');
   const length = searchParams.get('length');
 
+  console.log(name, length);
+
   const handleNewGame = useCallback(() => {
     setIsGameOver(false);
     setWinner(null);
@@ -68,9 +69,9 @@ const Game = ({
     if (!playerId) {
       const randomId = generateRandomId();
       setPlayerId(randomId);
-      socket.emit('joinGame', { playerId: randomId, playerName: name, car: `car${length}` });
+      socket.emit('joinGame', { playerId: randomId, playerName: name });
     } else {
-      socket.emit('joinGame', { playerId, playerName: name, car: `car${length}` });
+      socket.emit('joinGame', { playerId, playerName: name });
     }
 
     socket.on('updatePlayers', (data: Player[]) => {

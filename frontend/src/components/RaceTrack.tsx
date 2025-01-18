@@ -1,22 +1,16 @@
 import React from 'react';
 import Car1 from '../assets/car1.jpg';
-import Car2 from '../assets/car2.jpg';
-import Car3 from '../assets/car1.jpg';
-import Car4 from '../assets/car1.jpg';
+import Car2 from '../assets/car2.png';
+import Car3 from '../assets/car3.jpg';
+import Car4 from '../assets/car4.jpg';
 
 interface Player {
   id: string;
   name: string;
-  car: "car1" | "car2" | "car3" | "car4";
   progress: number;
 }
 
-const cars = {
-  car1: Car1,
-  car2: Car2,
-  car3: Car3,
-  car4: Car4,
-}
+const cars = [Car1, Car2, Car3, Car4];
 
 const RaceTrack: React.FC<{ players: Player[], playerId: string }> = ({ players, playerId }) => {
   return (
@@ -48,8 +42,8 @@ const RaceTrack: React.FC<{ players: Player[], playerId: string }> = ({ players,
                 style={{ left: `${player.progress}%` }}
               >
                 <img 
-                  src={cars[player.car]} 
-                  alt={player.car} 
+                  src={cars[index]} 
+                  alt={`car ${index + 1}`} 
                   className="h-8 w-auto object-contain"
                 />
               </div>
