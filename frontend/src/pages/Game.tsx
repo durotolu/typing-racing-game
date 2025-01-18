@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import io from 'socket.io-client';
 import RaceTrack from '../components/RaceTrack';
 import TypingArea from '../components/TypingArea';
@@ -40,6 +40,14 @@ const Game = ({
   const name = searchParams.get('name');
   const length = searchParams.get('length');
 
+  const handleNewGame = useCallback(() => {
+    setIsGameOver(false);
+    setWinner(null);
+    setPlayers([]);
+    socket.connect();
+    navigate('/');
+  }, [navigate, setPlayers]);
+
   useEffect(() => {
     if (players.length >= 4 && !isGameOver) {
       const timer = setInterval(() => {
@@ -52,7 +60,7 @@ const Game = ({
         });
       }, 1000);
     }
-  }, [players.length]);
+  }, [isGameOver, players.length]);
 
   useEffect(() => {
     if (firstExecution.current) {
@@ -87,21 +95,12 @@ const Game = ({
       socket.off('updatePlayers');
       socket.off('gameOver');
     };
-  }, []);
+  }, [handleNewGame, length, name, setPlayerId, setPlayers]);
 
   const handleProgress = (progress: number) => {
     if (!isOverlayActive && !isGameOver) {
       socket.emit('typingProgress', { playerId, progress });
     }
-  };
-
-  const handleNewGame = () => {
-    // Reset state for a new game
-    setIsGameOver(false);
-    setWinner(null);
-    setPlayers([]);
-    socket.connect(); // Reconnect the socket for a new game
-    navigate('/')
   };
 
   return (
