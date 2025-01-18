@@ -50,6 +50,20 @@ npm install
 
 ## Running the Application
 
+### Option 1: Run from root directory
+
+1. Install all dependencies (frontend and backend):
+```bash
+npm run install-all
+```
+
+2. Start both frontend and backend servers:
+```bash
+npm start
+```
+
+### Option 2: Run services separately
+
 1. Start the backend server:
 ```bash
 cd backend

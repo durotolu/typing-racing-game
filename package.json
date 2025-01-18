@@ -1,0 +1,16 @@
+{
+  "name": "typing-racing-game",
+  "version": "1.0.0",
+  "description": "A real-time multiplayer typing racing game where players compete against each other by typing text as fast and accurately as possible.",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
