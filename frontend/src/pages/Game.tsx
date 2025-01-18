@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import io from 'socket.io-client';
 import RaceTrack from '../components/RaceTrack';
 import TypingArea from '../components/TypingArea';
+import Leaderboard from '../components/Leaderboard';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const socket = io('http://localhost:4000');
@@ -128,12 +129,17 @@ const Game = ({
               </div>
             </div>
           )}
-          <RaceTrack players={players} playerId={playerId} />
-          <TypingArea 
-            onProgress={handleProgress} 
-            disabled={isOverlayActive || isGameOver} 
-            sentence={sentence}
-          />
+          <div className="flex gap-8">
+            <div className="flex-1">
+              <RaceTrack players={players} playerId={playerId} />
+              <TypingArea 
+                onProgress={handleProgress} 
+                disabled={isOverlayActive || isGameOver} 
+                sentence={sentence}
+              />
+            </div>
+            <Leaderboard players={players} playerId={playerId} />
+          </div>
         </>
       ) : (
         <div className="text-2xl text-center">Waiting for other players...</div>
